@@ -1,0 +1,115 @@
+<!-- 7. Design a web page that accepts a matrix as input and computes its transpose. The web 
+page should have two text boxes and a submit button labelled as Input Elements . After 
+entering the number of rows of the input matrix in the first text box and number of 
+columns of the input matrix in the second text box of the web page, SUBMIT button 
+should be clicked. Once clicked, a number of text boxes which are equivalent to the 
+number of elements in the matrix will appear along with a submit button at the bottom 
+labelled as Compute Transpose. When the Compute Transpose button is clicked, the 
+transpose of the inputmatrix has to be displayed.  -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Matrix Transpose</title>
+    <style>
+        .matrix-input {
+            margin-bottom: 10px;
+        }
+
+        .matrix-row {
+            display: flex;
+        }
+
+        .matrix-row input {
+            margin-right: 5px;
+            width: 50px;
+        }
+    </style>
+    <script>
+        function createMatrixInput() {
+            // Clear previous inputs 
+            document.getElementById('matrix-container').innerHTML = '';
+            document.getElementById('result-container').innerHTML = '';
+
+            let rows = parseInt(document.getElementById('rows').value);
+            let cols = parseInt(document.getElementById('cols').value);
+            let matrixContainer = document.getElementById('matrix-container');
+
+            for (let i = 0; i < rows; i++) {
+                let rowDiv = document.createElement('div');
+                rowDiv.className = 'matrix-row';
+                for (let j = 0; j < cols; j++) {
+                    let input = document.createElement('input');
+                    input.type = 'number';
+                    input.className = 'matrix-input';
+                    input.name = `matrix-${i}-${j}`;
+                    rowDiv.appendChild(input);
+                }
+                matrixContainer.appendChild(rowDiv);
+            }
+
+            let computeButton = document.createElement('button');
+            computeButton.innerHTML = 'Compute Transpose';
+            computeButton.onclick = computeTranspose;
+            matrixContainer.appendChild(computeButton);
+        }
+
+        function computeTranspose() {
+            let rows = parseInt(document.getElementById('rows').value);
+            let cols = parseInt(document.getElementById('cols').value);
+            let matrix = [];
+
+            // Reading the matrix 
+            for (let i = 0; i < rows; i++) {
+                let row = [];
+                for (let j = 0; j < cols; j++) {
+                    let value = document.querySelector(`input[name=matrix-${i}-${j}]`).value;
+                    row.push(parseInt(value));
+                }
+                matrix.push(row);
+            }
+
+            // Computing the transpose 
+            let transpose = [];
+            for (let i = 0; i < cols; i++) {
+                let row = [];
+                for (let j = 0; j < rows; j++) {
+                    row.push(matrix[j][i]);
+                }
+                transpose.push(row);
+            }
+
+            // Displaying the result 
+            let resultContainer = document.getElementById('result-container');
+            resultContainer.innerHTML = '<h3>Transpose of the Matrix:</h3>';
+            for (let i = 0; i < transpose.length; i++) {
+                let rowDiv = document.createElement('div');
+                rowDiv.className = 'matrix-row';
+                for (let j = 0; j < transpose[i].length; j++) {
+                    let resultCell = document.createElement('span');
+                    resultCell.innerHTML = transpose[i][j] + ' ';
+                    rowDiv.appendChild(resultCell);
+                }
+                resultContainer.appendChild(rowDiv);
+            }
+        } 
+    </script>
+</head>
+
+<body>
+    <h1>Matrix Transpose Calculator</h1>
+    <div>
+        <label for="rows">Number of Rows:</label>
+        <input type="number" id="rows" name="rows">
+        <label for="cols">Number of Columns:</label>
+        <input type="number" id="cols" name="cols">
+        <button onclick="createMatrixInput()">Input Elements</button>
+    </div>
+    <div id="matrix-container"></div>
+    <div id="result-container"></div>
+</body>
+
+</html>
